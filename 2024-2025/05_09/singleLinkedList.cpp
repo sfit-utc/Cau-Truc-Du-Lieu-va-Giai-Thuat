@@ -1,18 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#ifndef __SingleLinkedList__
-#define __SingleLinkedList__
-
 template <typename T>
 class Node
 {
-private:
+public:
     T data;
     Node *next;
-    // Node *prev;
 
-public:
     Node(T value)
     {
         data = value;
@@ -45,25 +40,18 @@ public:
         return num == 0;
     }
 
-    T back()
+    Node<T>* back()
     {
-        if (trailer)
-        {
-            return trailer->data;
-        }
+        return trailer;
     }
 
-    T front()
+    Node<T>* front()
     {
-        if (header)
-        {
-            return header->data;
-        }
+        return header;
     }
 
-    void push_back(T value)
+    void push_back(Node<T>* newNode)
     {
-        Node<T> *newNode = new Node<T>(value);
         if (empty())
         {
             header = trailer = newNode;
@@ -76,9 +64,8 @@ public:
         ++num;
     }
 
-    void push_front(T value)
+    void push_front(Node<T>* newNode)
     {
-        Node<T> *newNode = new Node<T>(value);
         if (empty())
         {
             header = trailer = newNode;
@@ -91,7 +78,7 @@ public:
         ++num;
     }
 
-    void insert(int pos, T value)
+    void insert(int pos, Node<T>* newNode)
     {
         if (pos < 0 || pos > num)
         {
@@ -99,15 +86,14 @@ public:
         }
         if (pos == 0)
         {
-            push_front(value);
+            push_front(newNode);
         }
         else if (pos == num)
         {
-            push_back(value);
+            push_back(newNode);
         }
         else
         {
-            Node<T> *newNode = new Node<T>(value);
             Node<T> *tmp = header;
             for (int i = 1; i < pos; i++)
             {
@@ -168,7 +154,7 @@ public:
         {
             pop_front();
         }
-        else if (pop == num - 1)
+        else if (pos == num - 1)
         {
             pop_back();
         }
@@ -186,30 +172,47 @@ public:
         }
     }
 
-    typedef Node<T> *iterator;
-    iterator begin()
-    {
-        return header;
+    class iterator {
+    private:
+        Node<T>* node;
+
+    public:
+        iterator(Node<T>* n) : node(n) {}
+
+        bool operator!=(const iterator& other) const {
+            return node != other.node;
+        }
+
+        iterator& operator++() {
+            node = node->next;
+            return *this;
+        }
+
+        T& operator*() {
+            return node->data;
+        }
+    };
+
+    iterator begin() {
+        return iterator(header);
     }
 
-    iterator end()
-    {
-        return nullptr;
-    }
-
-    bool operator!=(const iterator &a, const iterator &b)
-    {
-        return a != b;
-    }
-
-    iterator& operator++(iterator& it){
-        it = it->next;
-        return it;
-    }
-
-    T& operator*(iterator& it){
-        return it->data;
+    iterator end() {
+        return iterator(nullptr);
     }
 };
 
-#endif
+int main()
+{
+    SingleLinkedList<int> a;
+    Node<int> *newNode = new Node<int>(10);
+    
+    a.push_back(newNode);
+    
+    for (auto it = a.begin(); it != a.end(); ++it)
+    {
+        cout << *it << endl;
+    }
+
+    return 0;
+}
