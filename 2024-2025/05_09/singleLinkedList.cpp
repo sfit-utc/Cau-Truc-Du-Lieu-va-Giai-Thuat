@@ -173,6 +173,7 @@ public:
     }
 
     class iterator {
+    //phần iterator này được sửa lại, ai có thắc mắc gì thì cứ nhắn tin trực tiếp hỏi mình nhé
     private:
         Node<T>* node;
 
