@@ -6,6 +6,7 @@ class node {
 private:
     T elem;
     node* next;
+    node* prev;
 public:
     node(T e = T(), node* n = NULL) {
         elem = e;
